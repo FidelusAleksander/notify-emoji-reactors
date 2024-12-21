@@ -27,6 +27,6 @@ jobs:
     - name: Run Notify Emoji Reactors Action
       uses: ./
       with:
-        emoji: ':eyes:'
+        emoji: 'eyes'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
