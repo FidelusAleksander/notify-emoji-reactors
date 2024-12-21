@@ -13,6 +13,9 @@ async function tagUsersByReaction(octokit, context, emoji) {
         issue_number: issueNumber,
     });
 
+    // Log the count of all reactions
+    core.debug(`Total reactions: ${reactions.length}`);
+
     // Find users who reacted with the specified emoji
     const usersToTag = reactions
         .filter(reaction => reaction.content === emoji)
