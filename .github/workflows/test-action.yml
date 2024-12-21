@@ -1,0 +1,22 @@
+name: Test Notify Emoji Reactors
+
+on:
+  issues:
+    types: [opened, edited]
+  pull_request:
+    types: [opened, edited]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Run Notify Emoji Reactors Action
+      uses: ./
+      with:
+        emoji: ':eyes:'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

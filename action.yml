@@ -1,0 +1,12 @@
+name: 'Tag Users by Reaction'
+description: 'This action tags users who reacted with a specific emoji on GitHub Issues or Pull Requests.'
+inputs:
+  emoji:
+    description: 'The emoji to look for in reactions.'
+    required: true
+outputs:
+  tagged_users:
+    description: 'List of users tagged in the comment.'
+runs:
+  using: 'node12'
+  main: 'src/index.js'
