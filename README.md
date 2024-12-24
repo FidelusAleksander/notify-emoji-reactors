@@ -40,3 +40,35 @@ jobs:
         message: 'Feature has been implemented! :tada:'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
+
+### Example Workflow for Discussions
+
+```yaml
+name: Notify Discussion was answered
+
+on:
+  discussion:
+    types: [answered]
+
+permissions:
+  discussions: write
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: FidelusAleksander/notify-emoji-reactors@master
+      with:
+        emoji: 'bell'
+        message: 'An answer has been provided to this discussion, you should check it out :thinking: !'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```
