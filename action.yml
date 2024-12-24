@@ -1,5 +1,5 @@
 name: 'Tag Users by Reaction'
-description: 'This action tags users who reacted with a specific emoji on GitHub Issues or Pull Requests.'
+description: 'This action tags users who reacted with a specific emoji on GitHub Issues, Pull Requests, or Discussions.'
 inputs:
   emoji:
     description: 'The emoji to look for in reactions.'
@@ -8,5 +8,5 @@ inputs:
     description: 'The customizable message to include at the beginning of the comment.'
     required: false
 runs:
-  using: 'node12'
+  using: 'node20'
   main: 'src/index.js'
