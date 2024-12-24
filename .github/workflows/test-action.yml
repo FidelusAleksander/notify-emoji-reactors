@@ -23,6 +23,7 @@ jobs:
       with:
         node-version: '20'
 
+    - run: npm install
     - uses: ./
       with:
         emoji: 'eyes'
