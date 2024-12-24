@@ -4,7 +4,7 @@ This GitHub Action tags users who reacted with a specific emoji on GitHub Issues
 
 ## Inputs
 
-- `emoji`: **(required)** The emoji to look for in reactions.
+- `emoji`: **(required)** The emoji to look for in reactions (omit `:` around emojis). 
 - `message`: **(optional)** The customizable message to include at the beginning of the comment.
 
 
@@ -37,5 +37,6 @@ jobs:
       if: contains(github.event.issue.labels.*.name, 'feature')
       with:
         emoji: 'eyes'
+        message: 'Feature has been implemented! :tada:'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
