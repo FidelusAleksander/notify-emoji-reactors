@@ -2,16 +2,23 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 async function tagUsersByReaction(octokit, context, emoji, message) {
-    const issueNumber = context.issue.number;
+    const issueNumber = context.issue ? context.issue.number : context.payload.discussion.number;
     const owner = context.repo.owner;
     const repo = context.repo.repo;
+    const isDiscussion = !!context.payload.discussion;
 
-    // Fetch reactions for the issue or pull request
-    const { data: reactions } = await octokit.rest.reactions.listForIssue({
-        owner,
-        repo,
-        issue_number: issueNumber,
-    });
+    // Fetch reactions for the issue, pull request, or discussion
+    const { data: reactions } = isDiscussion
+        ? await octokit.rest.reactions.listForDiscussion({
+            owner,
+            repo,
+            discussion_number: issueNumber,
+        })
+        : await octokit.rest.reactions.listForIssue({
+            owner,
+            repo,
+            issue_number: issueNumber,
+        });
 
     // Log the count of all reactions
     console.log(`Total reactions: ${reactions.length}`);
@@ -23,12 +30,21 @@ async function tagUsersByReaction(octokit, context, emoji, message) {
 
     if (usersToTag.length > 0) {
         const commentBody = message ? `${message}\n${usersToTag.join(' ')}` : usersToTag.join(' ');
-        await octokit.rest.issues.createComment({
-            owner,
-            repo,
-            issue_number: issueNumber,
-            body: commentBody,
-        });
+        if (isDiscussion) {
+            await octokit.rest.teams.createDiscussionCommentInOrg({
+                org: owner,
+                team_slug: repo,
+                discussion_number: issueNumber,
+                body: commentBody,
+            });
+        } else {
+            await octokit.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: issueNumber,
+                body: commentBody,
+            });
+        }
     } else {
         console.log('No users reacted with the specified emoji.');
     }
