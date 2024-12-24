@@ -27,6 +27,6 @@ jobs:
     - uses: ./
       with:
         emoji: 'eyes'
-        message: 'Test message from ${{ github.workflow_ref }} workflow'
+        message: 'Test message from **${{ github.workflow }}** workflow'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
