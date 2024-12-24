@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-async function tagUsersByReaction(octokit, context, emoji) {
+async function tagUsersByReaction(octokit, context, emoji, message) {
     const issueNumber = context.issue.number;
     const owner = context.repo.owner;
     const repo = context.repo.repo;
@@ -22,7 +22,7 @@ async function tagUsersByReaction(octokit, context, emoji) {
         .map(reaction => `@${reaction.user.login}`);
 
     if (usersToTag.length > 0) {
-        const commentBody = `Thanks for your reaction! Tagging you: ${usersToTag.join(', ')}`;
+        const commentBody = message ? `${message}\n${usersToTag.join(' ')}` : usersToTag.join(' ');
         await octokit.rest.issues.createComment({
             owner,
             repo,
@@ -38,9 +38,10 @@ async function run() {
     try {
         const context = github.context;
         const emoji = core.getInput('emoji');
+        const message = core.getInput('message');
         const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
-        await tagUsersByReaction(octokit, context, emoji);
+        await tagUsersByReaction(octokit, context, emoji, message);
     } catch (error) {
         core.setFailed(error.message);
     }

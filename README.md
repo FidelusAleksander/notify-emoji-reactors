@@ -1,59 +1,74 @@
-# My GitHub Action
+# Tag Users by Reaction
 
-This GitHub Action automatically tags users who reacted to an issue or pull request with a specific emoji. 
-
-## Table of Contents
-
-- [Usage](#usage)
-- [Inputs](#inputs)
-- [Outputs](#outputs)
-- [Example](#example)
-- [License](#license)
-
-## Usage
-
-To use this action in your GitHub workflow, include the following in your workflow YAML file:
-
-```yaml
-jobs:
-  tag_reactors:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Tag Reactors
-        uses: ./notify-emoji-reactors
-        with:
-          emoji: ':eyes:'
-```
+This GitHub Action tags users who reacted with a specific emoji on GitHub Issues or Pull Requests. It can be used to notify users who have shown interest in a particular issue or PR by reacting with an emoji.
 
 ## Inputs
 
-- `emoji`: The emoji to look for in reactions. This is a required input.
+- `emoji`: **(required)** The emoji to look for in reactions (omit `:` around emojis). 
+- `message`: **(optional)** The customizable message to include at the beginning of the comment.
 
-## Outputs
 
-This action does not produce any outputs.
+## Usage
 
-## Example
-
-Here’s an example of how to set up the action in your workflow:
+### Example Workflow for Feature Requests
 
 ```yaml
-name: Tag Reactors
+name: Notify Feature Request Closed
 
 on:
-  issue_comment:
-    types: [created]
+  issues:
+    types: [closed]
+
+permissions:
+  issues: write
+  contents: read
 
 jobs:
-  tag_reactors:
+  notify:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Tag Reactors
-        uses: ./notify-emoji-reactors
-        with:
-          emoji: ':thumbsup:'
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: FidelusAleksander/notify-emoji-reactors@master
+      if: contains(github.event.issue.labels.*.name, 'feature')
+      with:
+        emoji: 'eyes'
+        message: 'Feature has been implemented! :tada:'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-## License
+### Example Workflow for Discussions
 
-This project is licensed under the MIT License. See the LICENSE file for more details.
+```yaml
+name: Notify Discussion was answered
+
+on:
+  discussion:
+    types: [answered]
+
+permissions:
+  discussions: write
+  contents: read
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: FidelusAleksander/notify-emoji-reactors@master
+      with:
+        emoji: 'bell'
+        message: 'An answer has been provided to this discussion, you should check it out :thinking: !'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+```

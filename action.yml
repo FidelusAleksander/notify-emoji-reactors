@@ -4,9 +4,9 @@ inputs:
   emoji:
     description: 'The emoji to look for in reactions.'
     required: true
-outputs:
-  tagged_users:
-    description: 'List of users tagged in the comment.'
+  message:
+    description: 'The customizable message to include at the beginning of the comment.'
+    required: false
 runs:
   using: 'node12'
   main: 'src/index.js'

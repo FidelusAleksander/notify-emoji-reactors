@@ -1,37 +1,31 @@
-name: Test Notify Emoji Reactors
+name: Test action
 
 on:
   issues:
-    types: [opened, edited]
+    types: [closed]
   pull_request:
-    types: [opened, edited]
-  issue_comment:
-    types: [created]
+    types: [closed]
+  discussion:
+    types: [answered]
 
 permissions:
   issues: write
   pull-requests: write
+  discussions: write
   contents: read
 
 jobs:
-  test:
+  notify:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
+    - uses: actions/checkout@v4
+    - uses: actions/setup-node@v4
       with:
-        node-version: '14'
+        node-version: '20'
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Run Notify Emoji Reactors Action
-      uses: ./
+    - uses: ./
       with:
         emoji: 'eyes'
+        message: 'Test message from ${{ github.workflow_ref }} workflow'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
