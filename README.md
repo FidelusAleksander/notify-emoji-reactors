@@ -41,3 +41,4 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
+![image](https://github.com/user-attachments/assets/2bbcdaa5-7a0d-4b34-9030-916de31f663e)
