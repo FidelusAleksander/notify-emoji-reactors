@@ -1,4 +1,7 @@
 name: 'Tag Users that Reacted with an Emoji'
+branding:
+  icon: 'bell'
+  color: 'yellow'
 description: 'This action tags users who reacted with a specific emoji on GitHub Issues or Pull Requests.'
 inputs:
   emoji:
